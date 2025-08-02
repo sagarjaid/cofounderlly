@@ -2,7 +2,7 @@ import { createClient } from "./supabase-client";
 
 export const signInWithLinkedIn = async () => {
   const supabase = createClient();
-  let redirectTo =
+  const redirectTo =
     typeof window !== "undefined"
       ? `${window.location.origin}/auth/callback`
       : "http://localhost:3000/auth/callback";

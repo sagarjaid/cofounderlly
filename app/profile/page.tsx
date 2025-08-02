@@ -37,7 +37,7 @@ export default function EditProfilePage() {
 
   const [isLoading, setIsLoading] = useState(false)
   const [profileLoaded, setProfileLoaded] = useState(false)
-  const [extraProfileFields, setExtraProfileFields] = useState<any>({})
+  const [extraProfileFields, setExtraProfileFields] = useState<Record<string, unknown>>({})
 
   // Load user data from Supabase on component mount
   useEffect(() => {
@@ -80,7 +80,7 @@ export default function EditProfilePage() {
     loadProfile()
   }, [])
 
-  const updateFormData = (field: string, value: any) => {
+  const updateFormData = (field: string, value: string | boolean | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -318,7 +318,7 @@ export default function EditProfilePage() {
                   </div>
 
                   <div>
-                    <Label>I'm looking for... (select all that apply)</Label>
+                    <Label>I&apos;m looking for... (select all that apply)</Label>
                     <div className="grid grid-cols-1 gap-3 mt-2">
                       {["hacker", "hipster", "hustler"].map((type) => (
                         <div key={type} className="flex items-center space-x-2">
@@ -376,11 +376,11 @@ export default function EditProfilePage() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="no" id="no-idea" />
-                        <Label htmlFor="no-idea">No, I want to join someone else's idea</Label>
+                        <Label htmlFor="no-idea">No, I want to join someone else&apos;s idea</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="both" id="both" />
-                        <Label htmlFor="both">Both - I'm open to either</Label>
+                        <Label htmlFor="both">Both - I&apos;m open to either</Label>
                       </div>
                     </RadioGroup>
                   </div>
@@ -392,7 +392,7 @@ export default function EditProfilePage() {
                         id="ideaDescription"
                         value={formData.ideaDescription}
                         onChange={(e) => updateFormData("ideaDescription", e.target.value)}
-                        placeholder="Describe your startup idea, the problem you're solving, and what kind of co-founder would complement your skills..."
+                        placeholder="Describe your startup idea, the problem you&apos;re solving, and what kind of co-founder would complement your skills..."
                         rows={4}
                       />
                     </div>
@@ -405,7 +405,7 @@ export default function EditProfilePage() {
                       onCheckedChange={(checked) => updateFormData("lookingToJoin", checked)}
                     />
                     <Label htmlFor="lookingToJoin">
-                      I'm also interested in adding value to existing ideas and helping them grow
+                      I&apos;m also interested in adding value to existing ideas and helping them grow
                     </Label>
                   </div>
                 </CardContent>
@@ -455,7 +455,7 @@ export default function EditProfilePage() {
                       id="bio"
                       value={formData.bio}
                       onChange={(e) => updateFormData("bio", e.target.value)}
-                      placeholder="Tell potential co-founders about yourself, your background, what you're passionate about, and what you bring to the table..."
+                      placeholder="Tell potential co-founders about yourself, your background, what you&apos;re passionate about, and what you bring to the table..."
                       rows={4}
                     />
                   </div>

@@ -359,7 +359,7 @@ export default function DashboardPage() {
                               </h3>
                               <Badge className={`${getTypeColor(founder.founder_type)} font-medium px-3 py-1`}>
                                 {getTypeIcon(founder.founder_type)}{" "}
-                                {founder.founder_type?.charAt(0).toUpperCase() + founder.founder_type?.slice(1)}
+                                {founder.founder_type ? founder.founder_type.charAt(0).toUpperCase() + founder.founder_type.slice(1) : "Unknown"}
                               </Badge>
                             </div>
                             <div className="flex items-center space-x-1 bg-green-50 px-3 py-1 rounded-full">

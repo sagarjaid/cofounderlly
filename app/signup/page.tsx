@@ -19,9 +19,9 @@ import { useRouter } from "next/navigation"
 export default function SignupPage() {
   const router = useRouter()
   const [step, setStep] = useState(1)
-  const [isLoading, setIsLoading] = useState(false)
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<import("@supabase/supabase-js").User | null>(null)
   const [loadingProfile, setLoadingProfile] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     // Step 1: Basic Info (only for unauthenticated)
     firstName: "",
@@ -128,7 +128,7 @@ export default function SignupPage() {
           bio: formData.bio,
         }
     const missingFields = Object.entries(requiredFields)
-      .filter(([key, value]) => !value)
+      .filter(([, value]) => !value)
       .map(([key]) => key)
     if (missingFields.length > 0) {
       alert(`Please fill in all required fields: ${missingFields.join(", ")}`)
@@ -172,7 +172,7 @@ export default function SignupPage() {
         // Create new user/profile (this assumes you have a signup API or Supabase signup logic)
         // For now, just insert into profiles (replace with real signup logic as needed)
         // If you have a user id, set it; otherwise, let Supabase generate it
-        const profileInsert: any = {
+        const profileInsert: Record<string, unknown> = {
           first_name: formData.firstName,
           last_name: formData.lastName,
           email: formData.email,
@@ -206,14 +206,14 @@ export default function SignupPage() {
         if (error) throw error
       }
       router.push("/dashboard")
-    } catch (error: any) {
-      alert("Error saving profile: " + (error.message || error))
+    } catch (error: unknown) {
+      alert("Error saving profile: " + (error instanceof Error ? error.message : String(error)))
     } finally {
       setIsLoading(false)
     }
   }
 
-  const updateFormData = (field: string, value: any) => {
+  const updateFormData = (field: string, value: string | boolean | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -415,7 +415,7 @@ export default function SignupPage() {
                 </div>
 
                 <div>
-                  <Label>I'm looking for... (select all that apply)</Label>
+                  <Label>I&apos;m looking for... (select all that apply)</Label>
                   <div className="grid grid-cols-1 gap-3 mt-2">
                     {["hacker", "hipster", "hustler"].map((type) => (
                       <div key={type} className="flex items-center space-x-2">
@@ -470,11 +470,11 @@ export default function SignupPage() {
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="no" id="no-idea" />
-                      <Label htmlFor="no-idea">No, I want to join someone else's idea</Label>
+                      <Label htmlFor="no-idea">No, I want to join someone else&apos;s idea</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="both" id="both" />
-                      <Label htmlFor="both">Both - I'm open to either</Label>
+                      <Label htmlFor="both">Both - I&apos;m open to either</Label>
                     </div>
                   </RadioGroup>
                 </div>
@@ -486,7 +486,7 @@ export default function SignupPage() {
                       id="ideaDescription"
                       value={formData.ideaDescription}
                       onChange={(e) => updateFormData("ideaDescription", e.target.value)}
-                      placeholder="Describe your startup idea, the problem you're solving, and what kind of co-founder would complement your skills..."
+                      placeholder="Describe your startup idea, the problem you&apos;re solving, and what kind of co-founder would complement your skills..."
                       rows={4}
                     />
                   </div>
@@ -499,7 +499,7 @@ export default function SignupPage() {
                     onCheckedChange={(checked) => updateFormData("lookingToJoin", checked)}
                   />
                   <Label htmlFor="lookingToJoin">
-                    I'm also interested in adding value to existing ideas and helping them grow
+                    I&apos;m also interested in adding value to existing ideas and helping them grow
                   </Label>
                 </div>
               </>
@@ -604,8 +604,8 @@ export default function SignupPage() {
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               ) : (
-                <Button onClick={handleSubmit} className="flex items-center space-x-2">
-                  <span>Complete Profile</span>
+                <Button onClick={handleSubmit} disabled={isLoading} className="flex items-center space-x-2">
+                  <span>{isLoading ? "Saving..." : "Complete Profile"}</span>
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               )}
